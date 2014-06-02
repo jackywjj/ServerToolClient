@@ -16,7 +16,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.app.Activity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.View;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +32,9 @@ public class ServerInforActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		setContentView(R.layout.activity_server_infor);
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,R.layout.custom_title);
 		
 		int inforType = 0;
 		if (getIntent().getExtras() != null) {
@@ -43,10 +50,11 @@ public class ServerInforActivity extends Activity {
 				String url = si.getFullUrl();
 				DefaultHttpClient httpclient = new DefaultHttpClient();
 				HttpGet httpGet = new HttpGet(url);
+				httpGet.setHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 				try {
 					HttpResponse response1 = httpclient.execute(httpGet);
 					mHandler.obtainMessage(0,
-							EntityUtils.toString(response1.getEntity()))
+							EntityUtils.toString(response1.getEntity(),"UTF-8"))
 							.sendToTarget();
 				} catch (ClientProtocolException e) {
 					e.printStackTrace();
@@ -55,6 +63,13 @@ public class ServerInforActivity extends Activity {
 				}
 			}
 		}.start();
+		
+		Button titleBackBtn = (Button) findViewById(R.id.TitleBackBtn);
+		titleBackBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 	
 	private Handler mHandler = new Handler() {

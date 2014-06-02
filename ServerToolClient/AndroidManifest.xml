@@ -27,7 +27,8 @@
         </activity>
         <activity
             android:name="com.ecstorm.stclient.ServerInforActivity"
-            android:label="@string/title_activity_server_infor" >
+            android:label="@string/title_activity_server_infor" 
+            android:theme="@style/MyCustomTheme" >
         </activity>
     </application>
 
